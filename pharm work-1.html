@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HealthConnect</title>
+<style>
+  :root{
+    --teal-900:#06464e;
+    --teal-700:#087f8c;
+    --teal-600:#0a97a6;
+    --teal-100:#e3f3f4;
+    --coral:#e8734a;
+    --coral-dark:#c85a34;
+    --ink:#1c2b2d;
+    --muted:#5c6f72;
+    --line:#d8e6e7;
+    --bg:#f4f8f8;
+    --white:#ffffff;
+    --good:#2f9e5c;
+    --warn:#c98a1c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    line-height:1.5;
+  }
+  nav{
+    background:var(--teal-900);
+    color:var(--white);
+    padding:16px 6%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  .brand{display:flex;align-items:center;gap:10px;cursor:pointer;}
+  .brand .dot{width:10px;height:10px;border-radius:50%;background:var(--coral);}
+  .brand h2{font-size:19px;font-weight:700;letter-spacing:-0.01em;}
+  .nav-links{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .nav-links button, .nav-links .who{
+    background:transparent;
+    color:var(--white);
+    border:1px solid rgba(255,255,255,0.35);
+    padding:8px 14px;
+    border-radius:20px;
+    cursor:pointer;
+    font-size:13.5px;
+  }
+  .nav-links button.primary{background:var(--white);color:var(--teal-700);border:none;font-weight:600;}
+  .nav-links .who{border:none;background:rgba(255,255,255,0.12);cursor:default;}
+  .page{display:none;padding:44px 6% 70px;min-height:70vh;max-width:1100px;margin:0 auto;}
+  .active{display:block;}
+  .hero{text-align:center;padding:60px 10px 30px;}
+  .hero h1{font-size:42px;color:var(--teal-900);margin-bottom:14px;letter-spacing:-0.02em;}
+  .hero p{font-size:18px;color:var(--muted);margin-bottom:34px;max-width:520px;margin-left:auto;margin-right:auto;}
+  .button-row{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;}
+  .btn{border:none;border-radius:8px;padding:13px 22px;font-size:15px;cursor:pointer;font-weight:600;transition:transform .08s ease, background .15s ease;}
+  .btn:active{transform:scale(0.97);}
+  .btn-main{background:var(--teal-700);color:var(--white);}
+  .btn-main:hover{background:var(--teal-600);}
+  .btn-outline{background:var(--white);color:var(--teal-700);border:1.5px solid var(--teal-700);}
+  .btn-coral{background:var(--coral);color:var(--white);}
+  .btn-coral:hover{background:var(--coral-dark);}
+  .btn-ghost{background:transparent;color:var(--teal-700);text-decoration:underline;padding:6px 4px;}
+  .btn-small{padding:8px 14px;font-size:13.5px;border-radius:6px;}
+  .btn:disabled{opacity:0.55;cursor:not-allowed;}
+  .form-container{max-width:460px;margin:10px auto;background:var(--white);padding:34px;border-radius:14px;box-shadow:0 8px 30px rgba(6,70,78,0.09);}
+  .form-container h2{color:var(--teal-900);margin-bottom:4px;text-align:center;}
+  .form-container .sub{text-align:center;color:var(--muted);font-size:13.5px;margin-bottom:22px;}
+  label{display:block;margin-top:14px;margin-bottom:6px;font-weight:600;font-size:13.5px;color:var(--teal-900);}
+  input,select,textarea{
+    width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:8px;font-size:14.5px;
+    font-family:inherit;background:var(--white);color:var(--ink);
+  }
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--teal-600);}
+  .form-btn{width:100%;margin-top:22px;padding:13px;background:var(--teal-700);color:var(--white);border:none;border-radius:8px;cursor:pointer;font-size:15px;font-weight:600;}
+  .form-btn:hover{background:var(--teal-600);}
+  .form-foot{text-align:center;margin-top:16px;font-size:13.5px;color:var(--muted);}
+  .form-foot a{color:var(--teal-700);cursor:pointer;font-weight:600;text-decoration:underline;}
+  .hint{font-size:12px;color:var(--muted);margin-top:4px;}
+  .dash-head{text-align:center;margin-bottom:32px;}
+  .dash-head h1{color:var(--teal-900);font-size:28px;}
+  .dash-head p{color:var(--muted);margin-top:6px;}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;}
+  .card{background:var(--white);padding:26px;border-radius:12px;box-shadow:0 4px 16px rgba(6,70,78,0.07);}
+  .card h3{color:var(--teal-900);margin-bottom:10px;font-size:17px;}
+  .card p{color:var(--muted);margin-bottom:16px;font-size:14px;}
+  .search-box{max-width:520px;margin:0 auto 26px;}
+  .result{background:var(--white);margin:14px 0;padding:20px;border-radius:12px;box-shadow:0 3px 12px rgba(6,70,78,0.06);display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;}
+  .result h3{color:var(--teal-900);margin-bottom:4px;}
+  .result .meta{color:var(--muted);font-size:13.5px;}
+  .result .distance{color:var(--coral-dark);font-weight:700;font-size:13.5px;margin-top:4px;}
+  .status-pill{display:inline-block;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:700;margin-top:6px;}
+  .status-pending{background:#fbead4;color:var(--warn);}
+  .status-accepted, .status-fulfilled{background:#e1f4e8;color:var(--good);}
+  .empty-note{color:var(--muted);text-align:center;padding:30px 0;font-size:14.5px;}
+  .presence-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:7px;background:#b9c6c7;}
+  .presence-dot.online{background:var(--good);box-shadow:0 0 0 3px rgba(47,158,92,0.18);}
+  .directory-group{margin-bottom:34px;}
+  .directory-group h2{color:var(--teal-900);font-size:19px;margin-bottom:14px;border-bottom:2px solid var(--teal-100);padding-bottom:8px;}
+  .dir-row{display:flex;justify-content:space-between;align-items:center;background:var(--white);padding:14px 18px;border-radius:10px;margin-bottom:8px;box-shadow:0 2px 8px rgba(6,70,78,0.05);flex-wrap:wrap;gap:8px;}
+  .dir-row .name{font-weight:700;color:var(--ink);}
+  .dir-row .sub{color:var(--muted);font-size:13px;}
+  .locate-row{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:24px;}
+  footer{background:var(--teal-900);color:rgba(255,255,255,0.75);text-align:center;padding:20px;font-size:13px;}
+  .toast{
+    position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);
+    background:var(--teal-900);color:var(--white);padding:12px 22px;border-radius:30px;
+    font-size:14px;opacity:0;pointer-events:none;transition:opacity .25s ease, transform .25s ease;
+    box-shadow:0 6px 20px rgba(0,0,0,0.2);z-index:999;max-width:80%;text-align:center;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+  .toast.error{background:var(--coral-dark);}
+  .privacy-note{background:var(--teal-100);color:var(--teal-900);font-size:13px;padding:12px 16px;border-radius:10px;margin-bottom:22px;max-width:640px;margin-left:auto;margin-right:auto;text-align:center;}
+  @media (max-width:600px){
+    .hero h1{font-size:30px;}
+    nav{padding:14px 5%;}
+    .page{padding:30px 5% 60px;}
+    .result{flex-direction:column;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand" onclick="showPage('home')">
+    <span class="dot"></span>
+    <h2>HealthConnect</h2>
+  </div>
+  <div class="nav-links" id="navLinks"></div>
+</nav>
+
+<!-- HOME -->
+<section id="home" class="page active">
+  <div class="hero">
+    <h1>HealthConnect</h1>
+    <p>Connecting patients, pharmacies and healthcare providers across Kenya.</p>
+    <div class="button-row">
+      <button class="btn btn-main" onclick="showPage('patientRegister')">I'm a Patient</button>
+      <button class="btn btn-main" onclick="showPage('pharmacyRegister')">I'm a Pharmacy</button>
+      <button class="btn btn-main" onclick="showPage('providerRegister')">I'm a Healthcare Provider</button>
+    </div>
+    <br>
+    <button class="btn btn-outline" onclick="showPage('login')">Already registered? Log in</button>
+    <br><br>
+    <button class="btn btn-ghost" onclick="showPage('directory')">See who's on HealthConnect →</button>
+  </div>
+</section>
+
+<!-- PATIENT REGISTER -->
+<section id="patientRegister" class="page">
+  <div class="form-container">
+    <h2>Patient Registration</h2>
+    <p class="sub">Create your account to find pharmacies and providers.</p>
+    <form id="patientRegisterForm" onsubmit="handleRegister(event,'patient')">
+      <label>Full Name</label>
+      <input type="text" name="name" placeholder="Enter your name" required>
+      <label>Email</label>
+      <input type="email" name="email" placeholder="Enter your email" required>
+      <label>Phone Number</label>
+      <input type="tel" name="phone" placeholder="Enter phone number" required>
+      <label>Your Town</label>
+      <select name="town" required id="patientTownSelect"></select>
+      <div class="hint">Used to find pharmacies near you. You can also share precise location later.</div>
+      <label>Password</label>
+      <input type="password" name="password" placeholder="Create password" required minlength="4">
+      <button class="form-btn">Create Patient Account</button>
+    </form>
+    <div class="form-foot">Have an account already? <a onclick="showPage('login')">Log in</a></div>
+  </div>
+</section>
+
+<!-- PHARMACY REGISTER -->
+<section id="pharmacyRegister" class="page">
+  <div class="form-container">
+    <h2>Pharmacy Registration</h2>
+    <p class="sub">List your pharmacy so patients nearby can find you.</p>
+    <form id="pharmacyRegisterForm" onsubmit="handleRegister(event,'pharmacy')">
+      <label>Pharmacy Name</label>
+      <input type="text" name="name" placeholder="Enter pharmacy name" required>
+      <label>Email</label>
+      <input type="email" name="email" placeholder="Pharmacy email" required>
+      <label>Phone Number</label>
+      <input type="tel" name="phone" placeholder="Phone number" required>
+      <label>Town / Location</label>
+      <select name="town" required id="pharmacyTownSelect"></select>
+      <label>Services Offered</label>
+      <input type="text" name="services" placeholder="e.g. Prescription services, OTC medicines" required>
+      <label>Password</label>
+      <input type="password" name="password" placeholder="Create password" required minlength="4">
+      <button class="form-btn">Register Pharmacy</button>
+    </form>
+    <div class="form-foot">Have an account already? <a onclick="showPage('login')">Log in</a></div>
+  </div>
+</section>
+
+<!-- PROVIDER REGISTER -->
+<section id="providerRegister" class="page">
+  <div class="form-container">
+    <h2>Healthcare Provider Registration</h2>
+    <p class="sub">Join as a doctor, pharmacist, nurse or other professional.</p>
+    <form id="providerRegisterForm" onsubmit="handleRegister(event,'provider')">
+      <label>Full Name</label>
+      <input type="text" name="name" placeholder="Dr. John Doe" required>
+      <label>Professional Category</label>
+      <select name="category" required>
+        <option value="">Select category</option>
+        <option>Doctor</option>
+        <option>Pharmacist</option>
+        <option>Nurse</option>
+        <option>Clinical Officer</option>
+        <option>Nutritionist</option>
+        <option>Other</option>
+      </select>
+      <label>Professional Registration Number</label>
+      <input type="text" name="regNumber" placeholder="Registration number" required>
+      <label>Town / Base Location</label>
+      <select name="town" required id="providerTownSelect"></select>
+      <label>Email</label>
+      <input type="email" name="email" placeholder="Professional email" required>
+      <label>Password</label>
+      <input type="password" name="password" placeholder="Create password" required minlength="4">
+      <button class="form-btn">Register as Provider</button>
+    </form>
+    <div class="form-foot">Have an account already? <a onclick="showPage('login')">Log in</a></div>
+  </div>
+</section>
+
+<!-- LOGIN -->
+<section id="login" class="page">
+  <div class="form-container">
+    <h2>Login</h2>
+    <p class="sub">Welcome back.</p>
+    <form id="loginForm" onsubmit="handleLogin(event)">
+      <label>Email</label>
+      <input type="email" name="email" placeholder="Enter email" required>
+      <label>Password</label>
+      <input type="password" name="password" placeholder="Enter password" required>
+      <label>Login as</label>
+      <select name="userType" required>
+        <option value="">Select account type</option>
+        <option value="patient">Patient</option>
+        <option value="pharmacy">Pharmacy</option>
+        <option value="provider">Healthcare Provider</option>
+      </select>
+      <button class="form-btn">Login</button>
+    </form>
+    <div class="form-foot">New here? <a onclick="showPage('home')">Create an account</a></div>
+  </div>
+</section>
+
+<!-- PATIENT DASHBOARD -->
+<section id="patientDashboard" class="page">
+  <div class="dash-head">
+    <h1 id="patientWelcome">Patient Dashboard</h1>
+    <p>Welcome to your HealthConnect dashboard.</p>
+  </div>
+  <div class="cards">
+    <div class="card">
+      <h3>Find a Pharmacy</h3>
+      <p>Search pharmacies or find the ones nearest to you.</p>
+      <button class="btn btn-main" onclick="openPharmacyFinder()">Find Pharmacy</button>
+    </div>
+    <div class="card">
+      <h3>Healthcare Providers</h3>
+      <p>Find healthcare professionals for consultation.</p>
+      <button class="btn btn-main" onclick="openPage('providers')">Find Provider</button>
+    </div>
+    <div class="card">
+      <h3>My Consultations</h3>
+      <p>View your consultation and pharmacy requests.</p>
+      <button class="btn btn-main" onclick="openPage('myActivity')">View</button>
+    </div>
+    <div class="card">
+      <h3>My Profile</h3>
+      <p>Update your contact details and town.</p>
+      <button class="btn btn-main" onclick="openPage('profile')">Manage</button>
+    </div>
+  </div>
+</section>
+
+<!-- PHARMACY DASHBOARD -->
+<section id="pharmacyDashboard" class="page">
+  <div class="dash-head">
+    <h1 id="pharmacyWelcome">Pharmacy Dashboard</h1>
+    <p>Manage your pharmacy services and patient requests.</p>
+  </div>
+  <div class="cards">
+    <div class="card">
+      <h3>Patient Requests</h3>
+      <p>View and fulfil requests from patients.</p>
+      <button class="btn btn-main" onclick="openPage('pharmacyRequests')">View Requests</button>
+    </div>
+    <div class="card">
+      <h3>Pharmacy Profile</h3>
+      <p>Manage your pharmacy information.</p>
+      <button class="btn btn-main" onclick="openPage('profile')">Manage</button>
+    </div>
+  </div>
+</section>
+
+<!-- PROVIDER DASHBOARD -->
+<section id="providerDashboard" class="page">
+  <div class="dash-head">
+    <h1 id="providerWelcome">Healthcare Provider Dashboard</h1>
+    <p>Manage consultations with patients.</p>
+  </div>
+  <div class="cards">
+    <div class="card">
+      <h3>Consultation Requests</h3>
+      <p>View patients requesting consultation.</p>
+      <button class="btn btn-main" onclick="openPage('providerRequests')">View Requests</button>
+    </div>
+    <div class="card">
+      <h3>My Profile</h3>
+      <p>Manage your professional profile.</p>
+      <button class="btn btn-main" onclick="openPage('profile')">Manage</button>
+    </div>
+  </div>
+</section>
+
+<!-- PHARMACY FINDER -->
+<section id="pharmacies" class="page">
+  <div class="dash-head">
+    <h1>Find a Pharmacy</h1>
+    <p>Search by name or town, or find the nearest ones to you.</p>
+  </div>
+  <div class="locate-row">
+    <button class="btn btn-coral btn-small" onclick="findNearestPharmacies()">Use my location — find nearest</button>
+    <button class="btn btn-outline btn-small" onclick="sortPharmaciesByTown()">Use my registered town instead</button>
+  </div>
+  <div class="search-box">
+    <input type="text" id="pharmacySearch" placeholder="Search pharmacy name or town..." oninput="renderPharmacyList()">
+  </div>
+  <div id="pharmacyResults"></div>
+</section>
+
+<!-- PROVIDER FINDER -->
+<section id="providers" class="page">
+  <div class="dash-head">
+    <h1>Find a Healthcare Provider</h1>
+    <p>Connect with healthcare professionals.</p>
+  </div>
+  <div class="search-box">
+    <input type="text" id="providerSearch" placeholder="Search name, category or town..." oninput="renderProviderList()">
+  </div>
+  <div id="providerResults"></div>
+</section>
+
+<!-- MY ACTIVITY (patient) -->
+<section id="myActivity" class="page">
+  <div class="dash-head">
+    <h1>My Activity</h1>
+    <p>Your consultation and pharmacy requests.</p>
+  </div>
+  <div id="myConsultations"></div>
+  <div id="myPharmacyRequests"></div>
+</section>
+
+<!-- PHARMACY REQUESTS -->
+<section id="pharmacyRequests" class="page">
+  <div class="dash-head">
+    <h1>Patient Requests</h1>
+    <p>Requests sent to your pharmacy.</p>
+  </div>
+  <div id="pharmacyRequestsList"></div>
+</section>
+
+<!-- PROVIDER REQUESTS -->
+<section id="providerRequests" class="page">
+  <div class="dash-head">
+    <h1>Consultation Requests</h1>
+    <p>Requests sent to you by patients.</p>
+  </div>
+  <div id="providerRequestsList"></div>
+</section>
+
+<!-- PROFILE -->
+<section id="profile" class="page">
+  <div class="form-container">
+    <h2>My Profile</h2>
+    <p class="sub" id="profileTypeLabel"></p>
+    <form id="profileForm" onsubmit="handleProfileSave(event)">
+      <div id="profileFields"></div>
+      <button class="form-btn">Save Changes</button>
+    </form>
+  </div>
+</section>
+
+<!-- DIRECTORY -->
+<section id="directory" class="page">
+  <div class="dash-head">
+    <h1>Who's on HealthConnect</h1>
+    <p>Everyone registered on the platform, and who's online right now.</p>
+  </div>
+  <div class="privacy-note">This directory is visible to everyone using HealthConnect — your name, town and online status are shown to other registered users.</div>
+  <div id="directoryContent"></div>
+</section>
+
+<footer>© 2026 HealthConnect | Healthcare made easier</footer>
+<div class="toast" id="toast"></div>
+
+<script>
+/* =========================================================
+   DATA / CONSTANTS
+========================================================= */
+const KENYA_TOWNS = [
+  {name:"Nairobi", lat:-1.2921, lng:36.8219},
+  {name:"Mombasa", lat:-4.0435, lng:39.6682},
+  {name:"Kisumu", lat:-0.0917, lng:34.7680},
+  {name:"Nakuru", lat:-0.3031, lng:36.0800},
+  {name:"Eldoret", lat:0.5143, lng:35.2698},
+  {name:"Thika", lat:-1.0332, lng:37.0692},
+  {name:"Malindi", lat:-3.2192, lng:40.1169},
+  {name:"Kitale", lat:1.0157, lng:35.0062},
+  {name:"Nyeri", lat:-0.4201, lng:36.9476},
+  {name:"Machakos", lat:-1.5177, lng:37.2634},
+  {name:"Kakamega", lat:0.2827, lng:34.7519},
+  {name:"Meru", lat:0.0500, lng:37.6500},
+  {name:"Kericho", lat:-0.3676, lng:35.2831},
+  {name:"Garissa", lat:-0.4536, lng:39.6401},
+  {name:"Kisii", lat:-0.6817, lng:34.7680}
+];
+const PRESENCE_ONLINE_WINDOW_MS = 45000; // consider "online" if heartbeat within 45s
+const HEARTBEAT_INTERVAL_MS = 15000;
+const REFRESH_INTERVAL_MS = 12000;
+
+/* =========================================================
+   STATE
+========================================================= */
+let directory = { users: [], consultations: [], pharmacyRequests: [] };
+let presence = {};
+let currentUser = null;
+let heartbeatTimer = null;
+let refreshTimer = null;
+
+/* =========================================================
+   STORAGE HELPERS
+========================================================= */
+async function loadDirectory(){
+  try{
+    const res = await window.storage.get('hc_directory', true);
+    return res ? JSON.parse(res.value) : { users: [], consultations: [], pharmacyRequests: [] };
+  }catch(e){
+    return { users: [], consultations: [], pharmacyRequests: [] };
+  }
+}
+async function saveDirectory(dir){
+  try{
+    await window.storage.set('hc_directory', JSON.stringify(dir), true);
+  }catch(e){
+    console.error('saveDirectory failed', e);
+    toast('Could not save — please try again.', 'error');
+  }
+}
+async function loadPresence(){
+  try{
+    const res = await window.storage.get('hc_presence', true);
+    return res ? JSON.parse(res.value) : {};
+  }catch(e){
+    return {};
+  }
+}
+async function savePresence(p){
+  try{
+    await window.storage.set('hc_presence', JSON.stringify(p), true);
+  }catch(e){ /* best effort */ }
+}
+async function loadSession(){
+  try{
+    const res = await window.storage.get('hc_session', false);
+    return res ? JSON.parse(res.value) : null;
+  }catch(e){
+    return null;
+  }
+}
+async function saveSession(s){
+  try{
+    await window.storage.set('hc_session', JSON.stringify(s), false);
+  }catch(e){ /* best effort */ }
+}
+async function clearSession(){
+  try{
+    await window.storage.delete('hc_session', false);
+  }catch(e){ /* best effort */ }
+}
+
+/* =========================================================
+   UTIL
+========================================================= */
+function toast(msg, type){
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast show' + (type === 'error' ? ' error' : '');
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(()=> el.classList.remove('show'), 3200);
+}
+function uid(prefix){
+  return prefix + '_' + Date.now().toString(36) + Math.random().toString(36).slice(2,8);
+}
+function haversineKm(lat1, lon1, lat2, lon2){
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI/180;
+  const dLon = (lon2 - lon1) * Math.PI/180;
+  const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+function townCoords(townName){
+  return KENYA_TOWNS.find(t => t.name === townName);
+}
+function findUserById(id){
+  return directory.users.find(u => u.id === id);
+}
+function isOnline(userId){
+  const last = presence[userId];
+  return typeof last === 'number' && (Date.now() - last) < PRESENCE_ONLINE_WINDOW_MS;
+}
+function populateTownSelects(){
+  const opts = '<option value="">Select town</option>' + KENYA_TOWNS.map(t => `<option>${t.name}</option>`).join('');
+  ['patientTownSelect','pharmacyTownSelect','providerTownSelect'].forEach(id=>{
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = opts;
+  });
+}
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+function showPage(pageId){
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const target = document.getElementById(pageId);
+  if (target) target.classList.add('active');
+  window.scrollTo(0,0);
+}
+function openPage(pageId){
+  // used for pages that need a fresh render of dynamic data each time they're opened
+  if (pageId === 'myActivity'){ renderMyActivity(); }
+  if (pageId === 'pharmacyRequests'){ renderPharmacyRequestsList(); }
+  if (pageId === 'providerRequests'){ renderProviderRequestsList(); }
+  if (pageId === 'providers'){ renderProviderList(); }
+  if (pageId === 'profile'){ renderProfileForm(); }
+  showPage(pageId);
+}
+function openPharmacyFinder(){
+  document.getElementById('pharmacySearch').value = '';
+  renderPharmacyList();
+  showPage('pharmacies');
+}
+function renderNav(){
+  const el = document.getElementById('navLinks');
+  if (!currentUser){
+    el.innerHTML = `
+      <button onclick="showPage('directory')">Directory</button>
+      <button class="primary" onclick="showPage('login')">Login</button>
+    `;
+    return;
+  }
+  const dashId = currentUser.type === 'patient' ? 'patientDashboard' : (currentUser.type === 'pharmacy' ? 'pharmacyDashboard' : 'providerDashboard');
+  el.innerHTML = `
+    <span class="who">${escapeHtml(currentUser.name)} · ${capitalize(currentUser.type)}</span>
+    <button onclick="showPage('directory')">Directory</button>
+    <button onclick="openPage('${dashId}')">Dashboard</button>
+    <button class="primary" onclick="handleLogout()">Log out</button>
+  `;
+}
+function capitalize(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
+function escapeHtml(str){
+  const d = document.createElement('div');
+  d.textContent = str == null ? '' : str;
+  return d.innerHTML;
+}
+
+/* =========================================================
+   REGISTRATION
+========================================================= */
+async function handleRegister(event, type){
+  event.preventDefault();
+  const form = event.target;
+  const data = Object.fromEntries(new FormData(form).entries());
+
+  directory = await loadDirectory(); // refresh before mutating
+  const emailTaken = directory.users.some(u => u.email.toLowerCase() === data.email.toLowerCase());
+  if (emailTaken){
+    toast('That email is already registered. Try logging in instead.', 'error');
+    return;
+  }
+
+  const user = {
+    id: uid('u'),
+    type,
+    name: data.name,
+    email: data.email,
+    phone: data.phone || '',
+    password: data.password,
+    town: data.town || '',
+    services: data.services || '',
+    category: data.category || '',
+    regNumber: data.regNumber || '',
+    createdAt: Date.now()
+  };
+
+  directory.users.push(user);
+  await saveDirectory(directory);
+
+  form.reset();
+  await logInAs(user);
+  toast('Account created — welcome, ' + user.name + '!');
+}
+
+/* =========================================================
+   LOGIN / LOGOUT / SESSION
+========================================================= */
+async function handleLogin(event){
+  event.preventDefault();
+  const form = event.target;
+  const data = Object.fromEntries(new FormData(form).entries());
+
+  directory = await loadDirectory();
+  const user = directory.users.find(u =>
+    u.email.toLowerCase() === data.email.toLowerCase() &&
+    u.password === data.password &&
+    u.type === data.userType
+  );
+
+  if (!user){
+    toast('No matching account found. Check your details.', 'error');
+    return;
+  }
+  form.reset();
+  await logInAs(user);
+  toast('Welcome back, ' + user.name + '!');
+}
+
+async function logInAs(user){
+  currentUser = user;
+  await saveSession({ userId: user.id });
+  await touchPresence();
+  startHeartbeat();
+  renderNav();
+  routeToDashboard();
+}
+
+function routeToDashboard(){
+  if (!currentUser) return showPage('home');
+  if (currentUser.type === 'patient'){
+    document.getElementById('patientWelcome').textContent = 'Welcome, ' + currentUser.name;
+    showPage('patientDashboard');
+  } else if (currentUser.type === 'pharmacy'){
+    document.getElementById('pharmacyWelcome').textContent = currentUser.name;
+    showPage('pharmacyDashboard');
+  } else {
+    document.getElementById('providerWelcome').textContent = 'Welcome, ' + currentUser.name;
+    showPage('providerDashboard');
+  }
+}
+
+async function handleLogout(){
+  if (currentUser){
+    delete presence[currentUser.id];
+    await savePresence(presence);
+  }
+  stopHeartbeat();
+  currentUser = null;
+  await clearSession();
+  renderNav();
+  showPage('home');
+  toast('Logged out.');
+}
+
+/* =========================================================
+   PRESENCE / HEARTBEAT
+========================================================= */
+async function touchPresence(){
+  if (!currentUser) return;
+  presence = await loadPresence();
+  presence[currentUser.id] = Date.now();
+  await savePresence(presence);
+}
+function startHeartbeat(){
+  stopHeartbeat();
+  heartbeatTimer = setInterval(touchPresence, HEARTBEAT_INTERVAL_MS);
+}
+function stopHeartbeat(){
+  if (heartbeatTimer) clearInterval(heartbeatTimer);
+  heartbeatTimer = null;
+}
+
+/* =========================================================
+   PERIODIC REFRESH (so new registrations / presence show up live)
+========================================================= */
+function startRefreshLoop(){
+  refreshTimer = setInterval(async ()=>{
+    directory = await loadDirectory();
+    presence = await loadPresence();
+    rerenderVisiblePage();
+  }, REFRESH_INTERVAL_MS);
+}
+function rerenderVisiblePage(){
+  const active = document.querySelector('.page.active');
+  if (!active) return;
+  const id = active.id;
+  if (id === 'directory') renderDirectory();
+  if (id === 'pharmacies') renderPharmacyList();
+  if (id === 'providers') renderProviderList();
+  if (id === 'myActivity') renderMyActivity();
+  if (id === 'pharmacyRequests') renderPharmacyRequestsList();
+  if (id === 'providerRequests') renderProviderRequestsList();
+}
+
+/* =========================================================
+   DIRECTORY (public: who's registered / online)
+========================================================= */
+function renderDirectory(){
+  const groups = { patient: [], pharmacy: [], provider: [] };
+  directory.users.forEach(u => { if (groups[u.type]) groups[u.type].push(u); });
+
+  const labels = { patient: 'Patients', pharmacy: 'Pharmacies', provider: 'Healthcare Providers' };
+  let html = '';
+  ['pharmacy','provider','patient'].forEach(type=>{
+    const list = groups[type];
+    html += `<div class="directory-group"><h2>${labels[type]} (${list.length})</h2>`;
+    if (list.length === 0){
+      html += `<div class="empty-note">No ${labels[type].toLowerCase()} registered yet.</div>`;
+    } else {
+      list.sort((a,b)=> (isOnline(b.id)?1:0) - (isOnline(a.id)?1:0));
+      list.forEach(u=>{
+        const online = isOnline(u.id);
+        const sub = type === 'provider'
+          ? `${escapeHtml(u.category || '')} · ${escapeHtml(u.town || 'Town not set')}`
+          : `${escapeHtml(u.town || 'Town not set')}`;
+        html += `
+          <div class="dir-row">
+            <div>
+              <span class="presence-dot ${online?'online':''}"></span>
+              <span class="name">${escapeHtml(u.name)}</span>
+              <div class="sub">${sub}</div>
+            </div>
+            <div class="sub">${online ? 'Online now' : 'Offline'}</div>
+          </div>`;
+      });
+    }
+    html += `</div>`;
+  });
+  document.getElementById('directoryContent').innerHTML = html;
+}
+
+/* =========================================================
+   PHARMACY FINDER
+========================================================= */
+let lastPatientCoords = null; // {lat, lng, label}
+
+function renderPharmacyList(sortedList){
+  const search = (document.getElementById('pharmacySearch').value || '').toLowerCase();
+  let pharmacies = directory.users.filter(u => u.type === 'pharmacy');
+
+  if (sortedList){
+    pharmacies = sortedList;
+  }
+  if (search){
+    pharmacies = pharmacies.filter(p =>
+      p.name.toLowerCase().includes(search) ||
+      (p.town || '').toLowerCase().includes(search) ||
+      (p.services || '').toLowerCase().includes(search)
+    );
+  }
+
+  const container = document.getElementById('pharmacyResults');
+  if (pharmacies.length === 0){
+    container.innerHTML = `<div class="empty-note">No pharmacies match yet — check back soon.</div>`;
+    return;
+  }
+
+  container.innerHTML = pharmacies.map(p => {
+    const dist = (p._distanceKm !== undefined) ? `<div class="distance">${p._distanceKm.toFixed(1)} km away</div>` : '';
+    return `
+      <div class="result">
+        <div>
+          <h3>${escapeHtml(p.name)}</h3>
+          <div class="meta">Location: ${escapeHtml(p.town || 'Not set')}</div>
+          <div class="meta">Services: ${escapeHtml(p.services || 'Not listed')}</div>
+          ${dist}
+        </div>
+        <button class="btn btn-coral btn-small" onclick="contactPharmacy('${p.id}')">Contact Pharmacy</button>
+      </div>`;
+  }).join('');
+}
+
+function findNearestPharmacies(){
+  if (!navigator.geolocation){
+    toast('Location is not supported on this device. Using your registered town instead.', 'error');
+    return sortPharmaciesByTown();
+  }
+  toast('Locating you…');
+  navigator.geolocation.getCurrentPosition(
+    (pos)=>{
+      lastPatientCoords = { lat: pos.coords.latitude, lng: pos.coords.longitude, label: 'your current location' };
+      applyNearestSort();
+      toast('Showing pharmacies nearest to your current location.');
+    },
+    ()=>{
+      toast('Location permission denied — using your registered town instead.', 'error');
+      sortPharmaciesByTown();
+    },
+    { timeout: 8000 }
+  );
+}
+
+function sortPharmaciesByTown(){
+  const town = currentUser && currentUser.town ? townCoords(currentUser.town) : null;
+  if (!town){
+    toast('Set your town in "My Profile" first, or allow location access.', 'error');
+    renderPharmacyList();
+    return;
+  }
+  lastPatientCoords = { lat: town.lat, lng: town.lng, label: currentUser.town };
+  applyNearestSort();
+  toast('Showing pharmacies nearest to ' + currentUser.town + '.');
+}
+
+function applyNearestSort(){
+  const pharmacies = directory.users.filter(u => u.type === 'pharmacy').map(p=>{
+    const coords = townCoords(p.town);
+    const distanceKm = coords && lastPatientCoords
+      ? haversineKm(lastPatientCoords.lat, lastPatientCoords.lng, coords.lat, coords.lng)
+      : Infinity;
+    return Object.assign({}, p, { _distanceKm: distanceKm });
+  }).sort((a,b)=> a._distanceKm - b._distanceKm);
+  renderPharmacyList(pharmacies);
+}
+
+/* =========================================================
+   PROVIDER FINDER
+========================================================= */
+function renderProviderList(){
+  const search = (document.getElementById('providerSearch').value || '').toLowerCase();
+  let providers = directory.users.filter(u => u.type === 'provider');
+  if (search){
+    providers = providers.filter(p =>
+      p.name.toLowerCase().includes(search) ||
+      (p.category || '').toLowerCase().includes(search) ||
+      (p.town || '').toLowerCase().includes(search)
+    );
+  }
+  const container = document.getElementById('providerResults');
+  if (providers.length === 0){
+    container.innerHTML = `<div class="empty-note">No providers match yet — check back soon.</div>`;
+    return;
+  }
+  container.innerHTML = providers.map(p => `
+    <div class="result">
+      <div>
+        <h3>${escapeHtml(p.name)}</h3>
+        <div class="meta">Specialty: ${escapeHtml(p.category || 'General')}</div>
+        <div class="meta">Base: ${escapeHtml(p.town || 'Not set')}</div>
+        <div class="meta">${isOnline(p.id) ? '🟢 Online now' : 'Offline'}</div>
+      </div>
+      <button class="btn btn-coral btn-small" onclick="requestConsultation('${p.id}')">Request Consultation</button>
+    </div>
+  `).join('');
+}
+
+/* =========================================================
+   CONSULTATIONS & PHARMACY REQUESTS
+========================================================= */
+async function requestConsultation(providerId){
+  if (!currentUser || currentUser.type !== 'patient'){
+    toast('Please log in as a patient to request a consultation.', 'error');
+    return showPage('login');
+  }
+  directory = await loadDirectory();
+  const provider = findUserById(providerId);
+  if (!provider){ toast('That provider is no longer available.', 'error'); return; }
+
+  directory.consultations.push({
+    id: uid('c'),
+    patientId: currentUser.id,
+    patientName: currentUser.name,
+    providerId: provider.id,
+    providerName: provider.name,
+    status: 'pending',
+    createdAt: Date.now()
+  });
+  await saveDirectory(directory);
+  toast('Consultation request sent to ' + provider.name + '.');
+}
+
+async function contactPharmacy(pharmacyId){
+  if (!currentUser || currentUser.type !== 'patient'){
+    toast('Please log in as a patient to contact a pharmacy.', 'error');
+    return showPage('login');
+  }
+  directory = await loadDirectory();
+  const pharmacy = findUserById(pharmacyId);
+  if (!pharmacy){ toast('That pharmacy is no longer available.', 'error'); return; }
+
+  directory.pharmacyRequests.push({
+    id: uid('r'),
+    patientId: currentUser.id,
+    patientName: currentUser.name,
+    pharmacyId: pharmacy.id,
+    pharmacyName: pharmacy.name,
+    status: 'pending',
+    createdAt: Date.now()
+  });
+  await saveDirectory(directory);
+  toast('Request sent to ' + pharmacy.name + '.');
+}
+
+function renderMyActivity(){
+  if (!currentUser) return;
+  const myConsults = directory.consultations.filter(c => c.patientId === currentUser.id).sort((a,b)=>b.createdAt-a.createdAt);
+  const myRequests = directory.pharmacyRequests.filter(r => r.patientId === currentUser.id).sort((a,b)=>b.createdAt-a.createdAt);
+
+  document.getElementById('myConsultations').innerHTML = `
+    <h2 style="color:var(--teal-900);margin-bottom:12px;">Consultation Requests</h2>` +
+    (myConsults.length === 0 ? `<div class="empty-note">No consultation requests yet.</div>` :
+      myConsults.map(c => `
+        <div class="result">
+          <div>
+            <h3>${escapeHtml(c.providerName)}</h3>
+            <span class="status-pill status-${c.status}">${capitalize(c.status)}</span>
+          </div>
+        </div>`).join(''));
+
+  document.getElementById('myPharmacyRequests').innerHTML = `
+    <h2 style="color:var(--teal-900);margin:26px 0 12px;">Pharmacy Requests</h2>` +
+    (myRequests.length === 0 ? `<div class="empty-note">No pharmacy requests yet.</div>` :
+      myRequests.map(r => `
+        <div class="result">
+          <div>
+            <h3>${escapeHtml(r.pharmacyName)}</h3>
+            <span class="status-pill status-${r.status}">${capitalize(r.status)}</span>
+          </div>
+        </div>`).join(''));
+}
+
+function renderPharmacyRequestsList(){
+  if (!currentUser) return;
+  const requests = directory.pharmacyRequests.filter(r => r.pharmacyId === currentUser.id).sort((a,b)=>b.createdAt-a.createdAt);
+  const container = document.getElementById('pharmacyRequestsList');
+  if (requests.length === 0){
+    container.innerHTML = `<div class="empty-note">No patient requests yet.</div>`;
+    return;
+  }
+  container.innerHTML = requests.map(r => `
+    <div class="result">
+      <div>
+        <h3>${escapeHtml(r.patientName)}</h3>
+        <span class="status-pill status-${r.status}">${capitalize(r.status)}</span>
+      </div>
+      ${r.status === 'pending' ? `<button class="btn btn-main btn-small" onclick="fulfillPharmacyRequest('${r.id}')">Mark Fulfilled</button>` : ''}
+    </div>
+  `).join('');
+}
+
+function renderProviderRequestsList(){
+  if (!currentUser) return;
+  const requests = directory.consultations.filter(c => c.providerId === currentUser.id).sort((a,b)=>b.createdAt-a.createdAt);
+  const container = document.getElementById('providerRequestsList');
+  if (requests.length === 0){
+    container.innerHTML = `<div class="empty-note">No consultation requests yet.</div>`;
+    return;
+  }
+  container.innerHTML = requests.map(c => `
+    <div class="result">
+      <div>
+        <h3>${escapeHtml(c.patientName)}</h3>
+        <span class="status-pill status-${c.status}">${capitalize(c.status)}</span>
+      </div>
+      ${c.status === 'pending' ? `<button class="btn btn-main btn-small" onclick="acceptConsultation('${c.id}')">Accept</button>` : ''}
+    </div>
+  `).join('');
+}
+
+async function fulfillPharmacyRequest(requestId){
+  directory = await loadDirectory();
+  const req = directory.pharmacyRequests.find(r => r.id === requestId);
+  if (req){ req.status = 'fulfilled'; await saveDirectory(directory); renderPharmacyRequestsList(); toast('Marked as fulfilled.'); }
+}
+async function acceptConsultation(consultId){
+  directory = await loadDirectory();
+  const c = directory.consultations.find(c => c.id === consultId);
+  if (c){ c.status = 'accepted'; await saveDirectory(directory); renderProviderRequestsList(); toast('Consultation accepted.'); }
+}
+
+/* =========================================================
+   PROFILE
+========================================================= */
+function renderProfileForm(){
+  if (!currentUser) return;
+  document.getElementById('profileTypeLabel').textContent = capitalize(currentUser.type) + ' account';
+  const townOptions = '<option value="">Select town</option>' + KENYA_TOWNS.map(t =>
+    `<option ${currentUser.town === t.name ? 'selected' : ''}>${t.name}</option>`).join('');
+
+  let extra = '';
+  if (currentUser.type === 'pharmacy'){
+    extra = `
+      <label>Services Offered</label>
+      <input type="text" name="services" value="${escapeHtml(currentUser.services)}" required>`;
+  }
+  if (currentUser.type === 'provider'){
+    extra = `
+      <label>Professional Category</label>
+      <input type="text" name="category" value="${escapeHtml(currentUser.category)}" required>`;
+  }
+
+  document.getElementById('profileFields').innerHTML = `
+    <label>Full Name</label>
+    <input type="text" name="name" value="${escapeHtml(currentUser.name)}" required>
+    <label>Phone Number</label>
+    <input type="tel" name="phone" value="${escapeHtml(currentUser.phone)}" required>
+    <label>Town</label>
+    <select name="town">${townOptions}</select>
+    ${extra}
+  `;
+}
+
+async function handleProfileSave(event){
+  event.preventDefault();
+  const data = Object.fromEntries(new FormData(event.target).entries());
+  directory = await loadDirectory();
+  const user = findUserById(currentUser.id);
+  if (!user){ toast('Account not found.', 'error'); return; }
+  Object.assign(user, data);
+  await saveDirectory(directory);
+  currentUser = user;
+  renderNav();
+  toast('Profile updated.');
+}
+
+/* =========================================================
+   INIT
+========================================================= */
+async function init(){
+  populateTownSelects();
+  directory = await loadDirectory();
+  presence = await loadPresence();
+
+  const session = await loadSession();
+  if (session && session.userId){
+    const user = directory.users.find(u => u.id === session.userId);
+    if (user){
+      currentUser = user;
+      await touchPresence();
+      startHeartbeat();
+    } else {
+      await clearSession();
+    }
+  }
+
+  renderNav();
+  renderDirectory();
+  renderPharmacyList();
+  renderProviderList();
+  startRefreshLoop();
+
+  if (currentUser){
+    routeToDashboard();
+  }
+}
+
+init();
+</script>
+</body>
+</html>
